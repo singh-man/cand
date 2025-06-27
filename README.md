@@ -2,6 +2,11 @@
 
 ### To run a specific module
 
-```sh
+```shell
 mvn clean install -pl <dir|module> -am
+```
+OR
+```shell
+cd <dir>
+mvn clean install
 ```
