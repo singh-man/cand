@@ -2,7 +2,7 @@
 
 ### Pre Requisite
 
-JDK 11 environment.
+JDK 21 environment.
 
 ### 1. To Build
 Open a terminal in the directory cc-lloyds and run 
