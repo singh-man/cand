@@ -110,5 +110,4 @@ class ATMServiceTest {
 
 		assertTrue(exception.getMessage().contains("User doesn't exist, please check account number"));
 	}
-
 }

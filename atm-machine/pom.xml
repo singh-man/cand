@@ -8,22 +8,17 @@
 		<!--        <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
 	</parent>
 
-	<groupId>com.zinkworks</groupId>
+<!--	<groupId>com.zinkworks</groupId>-->
 	<artifactId>atm-machine</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<name>atm-machine</name>
-	<description>Atm project for zinkworks</description>
+	<description>ATM project for zinkworks</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -32,7 +27,7 @@
 		<dependency>
 			<groupId>org.jacoco</groupId>
 			<artifactId>jacoco-maven-plugin</artifactId>
-			<version>0.8.7</version>
+			<version>0.8.12</version>
 		</dependency>
 
 		<!--Swagger-->
@@ -60,7 +55,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.7</version>
+				<version>0.8.12</version>
 				<executions>
 					<execution>
 						<goals>
@@ -95,5 +90,4 @@
 			</plugin>
 		</plugins>
 	</reporting>
-
 </project>
