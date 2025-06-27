@@ -1,0 +1,85 @@
+{
+	"variables": [],
+	"info": {
+		"name": "atm-machine",
+		"_postman_id": "69d2182c-90f6-5df4-fd3f-dc4e82326764",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/atm/withdraw",
+			"request": {
+				"url": "http://localhost:8080/atm/withdraw",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"accountId\":123456789,\n\"pin\":1234,\n\"amount\":400\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/atm",
+			"request": {
+				"url": "http://localhost:8080/atm",
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-csrf-token",
+						"value": "f29a0a21e2adb7d15db0",
+						"description": "",
+						"disabled": true
+					},
+					{
+						"key": "Cookie",
+						"value": "_barong_session=07d852dcc986d2b54b9c91bf435c4ae7",
+						"description": "",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"id\":1,\n\"note5\":20,\n\"note10\":30,\n\"note20\":30,\n\"note50\":10\n}"
+				},
+				"description": "Initialize ATM with Money"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/atm/getBalance/accountId/123456789/pin/1234",
+			"request": {
+				"url": "http://localhost:8080/atm/getBalance/accountId/123456789/pin/1234",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Check user balance"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/atm/find/1",
+			"request": {
+				"url": "http://localhost:8080/atm/find/1",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Check ATM status"
+			},
+			"response": []
+		}
+	]
+}
