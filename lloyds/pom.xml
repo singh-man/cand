@@ -21,7 +21,12 @@
     <url>http://www.example.com</url>
 
     <dependencies>
-
+        <!--Swagger-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${openapi.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
