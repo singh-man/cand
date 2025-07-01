@@ -34,7 +34,6 @@ public class ResponseHandler {
         return new ResponseEntity<Object>(map,status);
     }
 
-
     /**
      * Overloaded function to generate json response to the client
      * @param message mnessage

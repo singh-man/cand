@@ -7,9 +7,7 @@ import org.springframework.stereotype.Component;
 import static com.zinkworks.atmmachine.enums.CurrencyEnum.FIFTY;
 
 /**
- * 
  * @author Manish.Singh
- *
  */
 @Component("fifty")
 public class DispenseNoteFifty implements NoteDispenser {

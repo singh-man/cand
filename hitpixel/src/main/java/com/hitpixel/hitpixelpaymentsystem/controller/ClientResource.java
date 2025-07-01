@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/client")
@@ -77,7 +77,7 @@ public class ClientResource {
      */
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> updateClient(@RequestBody ClientDAO client) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/client/update").toUriString());
+        var uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/client/update").toUriString());
         log.info("Updating client, id {}", client.getId());
         var updatedClient = clientService.update(client);
         var dao = modelMapper.map(updatedClient, ClientDAO.class);
@@ -101,10 +101,9 @@ public class ClientResource {
         Pageable paging = PageRequest.of(page, size);
         Page<Client> pagingClients = clientService.list(paging);
 
-        List<ClientDAO> result = new ArrayList<>();
-        for (Client client : pagingClients.getContent()) {
-            result.add(modelMapper.map(client, ClientDAO.class));
-        }
+        List<ClientDAO> result = pagingClients.getContent().stream()
+                .map(e -> modelMapper.map(e, ClientDAO.class))
+                .collect(Collectors.toList());
 
         if (result.size() < 1) {
             return ResponseHandler.generateResponse("No Clients found ", HttpStatus.OK, result);
@@ -114,5 +113,4 @@ public class ClientResource {
                 result, pagingClients.getNumber(), pagingClients.getTotalPages());
 
     }
-
 }

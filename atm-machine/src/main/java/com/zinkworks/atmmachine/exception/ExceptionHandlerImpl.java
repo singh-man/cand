@@ -12,13 +12,13 @@ public class ExceptionHandlerImpl {
 	@ExceptionHandler(ValidationException.class)
 	public ResponseEntity<?> handleException(final ValidationException exception) {
 		final ATMApiError apiError = new ATMApiError(exception.getStatus(), exception.getMessage());
-		return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+		return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.status());
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> handleException(final Exception exception) {
 		final ATMApiError apiError = new ATMApiError(HttpStatus.BAD_REQUEST, exception.getMessage());
-		return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+		return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.status());
 	}
 
 }

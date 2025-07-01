@@ -30,6 +30,7 @@ public class TransactionServiceImpl implements ITransactionService {
 
     /**
      * Add Transaction to the database
+     *
      * @param transactionDAO transaction details provided through the API
      * @return saved Transaction
      * @throws Exception exception (better exception can be done for better visibility of the issue)
@@ -40,11 +41,11 @@ public class TransactionServiceImpl implements ITransactionService {
         // According to the design document, the name will be the key here to find the client
         // but in real world there should be client ID in the transaction, because there can be duplicate client names.
         log.info("Find the client by client name {}", transactionDAO.getClientName());
-        Optional<Client> client  = clientRepo.findByName(transactionDAO.getClientName());
+        Optional<Client> client = clientRepo.findByName(transactionDAO.getClientName());
         Transaction transaction;
 
         // add transaction for active clients only
-        if(client.isPresent() && client.get().getStatus().equalsIgnoreCase("active")) {
+        if (client.isPresent() && client.get().getStatus().equalsIgnoreCase("active")) {
             transaction = modelMapper.map(transactionDAO, Transaction.class);
             // Will have reference of client ID in the transaction rather than the full client object
             transaction.setClientId(client.get().getId());
@@ -59,6 +60,7 @@ public class TransactionServiceImpl implements ITransactionService {
 
     /**
      * Update transaction
+     *
      * @param transactionDAO transaction details to be updated
      * @return updated transaction
      */
@@ -70,24 +72,26 @@ public class TransactionServiceImpl implements ITransactionService {
 
     /**
      * Update the transaction bill status to TRUE means bill has been generated for this transaction
+     *
      * @param id transaction id
      * @return boolean true=success, false=failure
      */
     @Override
     public boolean updateTransactionBillStatus(Long id) {
-        var isUpdated = false;
         log.info("Check if the transaction {} exists in the database", id);
         Optional<Transaction> transaction = transactionRepo.findById(id);
-        if(transaction.isPresent()) {
-            Transaction trans = transaction.get();
-            trans.setIsBillGenerated(Boolean.TRUE);
-            isUpdated = true;
-        }
-        return isUpdated;
+        return transaction
+                .map(e -> {
+                    Transaction trans = transaction.get();
+                    trans.setIsBillGenerated(Boolean.TRUE);
+                    return true;
+                })
+                .orElse(false);
     }
 
     /**
      * Get transactions client id using pagination
+     *
      * @param clientId client id
      * @param pageable pageination object
      * @return transactions in page object
@@ -99,25 +103,27 @@ public class TransactionServiceImpl implements ITransactionService {
 
     /**
      * Delete Transaction by id
+     *
      * @param id transaction id
      * @return boolean, true=success, false=failure
      */
     @Override
     public boolean delete(Long id) {
-        var isRemoved = false;
         log.info("Check if the transaction {} exists in the database", id);
         Optional<Transaction> transaction = transactionRepo.findById(id);
-        if (transaction.isPresent()) {
-            log.info("Deleting transaction, name {}", transaction.get().getOrderName());
-            transactionRepo.delete(transaction.get());
-            // return true if delete is successful
-            isRemoved = true;
-        }
-        return isRemoved;
+        return transaction
+                .map(e -> {
+                    log.info("Deleting transaction, name {}", transaction.get().getOrderName());
+                    transactionRepo.delete(transaction.get());
+                    // return true if delete is successful
+                    return true;
+                })
+                .orElse(false);
     }
 
     /**
-     * list of transacitons using pagination
+     * list of transactions using pagination
+     *
      * @param pageable pagination config
      * @return transactions in page object
      */
@@ -128,8 +134,9 @@ public class TransactionServiceImpl implements ITransactionService {
 
     /**
      * get transactions by client name and pagination config
+     *
      * @param clientName client name
-     * @param pageable pagination object
+     * @param pageable   pagination object
      * @return transactions in page object
      */
     @Override

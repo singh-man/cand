@@ -33,7 +33,6 @@ public class InvoiceGeneratorResource {
             return ResponseHandler.generateResponse("Invalid Billing-Interval provided (must be either daily or monthly) ", HttpStatus.BAD_REQUEST, null);
         }
         return ResponseHandler.generateResponse(billingInterval + " Bill-generated successfully" , HttpStatus.OK,null);
-
     }
 
     /**
@@ -49,6 +48,5 @@ public class InvoiceGeneratorResource {
             return ResponseHandler.generateResponse("Invalid Billing-Interval provided (must be either daily or monthly) ", HttpStatus.BAD_REQUEST, null);
         }
         return ResponseHandler.generateResponse( " Bill-generated successfully for Client " + clientName , HttpStatus.OK,null);
-
     }
 }

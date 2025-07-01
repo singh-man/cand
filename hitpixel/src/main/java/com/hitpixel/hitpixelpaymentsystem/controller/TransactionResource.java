@@ -15,8 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/transaction")
@@ -52,9 +52,10 @@ public class TransactionResource {
     /**
      * Fetch transactions by client name in page format, so we dont overload the memory with too much data
      * Again further configruation can be done to make the function better and more productionized
+     *
      * @param clientName client name
-     * @param page which page client want to see
-     * @param size number of items to see per page
+     * @param page       which page client want to see
+     * @param size       number of items to see per page
      * @return list of transactions
      */
     @GetMapping("/byclient")
@@ -64,14 +65,12 @@ public class TransactionResource {
         Pageable paging = PageRequest.of(page, size);
         Page<Transaction> pagingTransactions = transactionService.getTransactionsByClientName(clientName, paging);
 
-        List<TransactionDAO> result = new ArrayList<>();
-
-        for (Transaction transaction : pagingTransactions.getContent()) {
-            result.add(modelMapper.map(transaction, TransactionDAO.class));
-        }
+        List<TransactionDAO> result = pagingTransactions.getContent().stream()
+                .map(e -> modelMapper.map(e, TransactionDAO.class))
+                .collect(Collectors.toList());
 
         if (result.size() < 1) {
-            return ResponseHandler.generateResponse("No Transactions found by client name - " + clientName,HttpStatus.NOT_FOUND, result);
+            return ResponseHandler.generateResponse("No Transactions found by client name - " + clientName, HttpStatus.NOT_FOUND, result);
         }
 
         return ResponseHandler.generateResponse("Fetched Transactions by client name - " + clientName,
@@ -92,26 +91,28 @@ public class TransactionResource {
         if (!isUpdated) {
             return ResponseHandler.generateResponse("Failed to update the bill status ", HttpStatus.NOT_FOUND, id);
         }
-        return ResponseHandler.generateResponse("Updated bill status of transaction successfully" , HttpStatus.OK,id);
+        return ResponseHandler.generateResponse("Updated bill status of transaction successfully", HttpStatus.OK, id);
     }
 
     /**
      * Update the Transaction
+     *
      * @param transactionDAO transaction details provided by the client
      * @return updated transaction & httpStatus and response message
      */
     @PutMapping(value = "/update")
     public ResponseEntity<Object> updateTransaction(@RequestBody TransactionDAO transactionDAO) {
         Transaction updatedTransaction = transactionService.updateTransaction(transactionDAO);
-        if(updatedTransaction != null) {
+        if (updatedTransaction != null) {
             TransactionDAO dao = modelMapper.map(updatedTransaction, TransactionDAO.class);
-            return ResponseHandler.generateResponse("Updated Transaction successfully" , HttpStatus.OK,dao);
+            return ResponseHandler.generateResponse("Updated Transaction successfully", HttpStatus.OK, dao);
         }
-        return ResponseHandler.generateResponse("Failed to update Transaction" , HttpStatus.BAD_REQUEST,null);
+        return ResponseHandler.generateResponse("Failed to update Transaction", HttpStatus.BAD_REQUEST, null);
     }
 
     /**
      * Delete Transaction by Id
+     *
      * @param id id of transaction
      * @return HttpStatus code and response message
      */
@@ -121,12 +122,12 @@ public class TransactionResource {
         if (!isRemoved) {
             return ResponseHandler.generateResponse("No Transaction found to delete ", HttpStatus.NOT_FOUND, id);
         }
-        return ResponseHandler.generateResponse("Deleted Transaction successfully" , HttpStatus.OK,id);
-
+        return ResponseHandler.generateResponse("Deleted Transaction successfully", HttpStatus.OK, id);
     }
 
     /**
      * Get all transactions using pagination to avoid data overload
+     *
      * @param page page size
      * @param size number of items on one page
      * @return transactions and httpStatus & response message
@@ -137,16 +138,15 @@ public class TransactionResource {
         Pageable paging = PageRequest.of(page, size);
         Page<Transaction> pagingTransactions = transactionService.list(paging);
 
-        List<TransactionDAO> result = new ArrayList<>();
-        for (Transaction transaction : pagingTransactions.getContent()) {
-            result.add(modelMapper.map(transaction, TransactionDAO.class));
-        }
+        List<TransactionDAO> result = pagingTransactions.getContent().stream()
+                .map(e -> modelMapper.map(e, TransactionDAO.class))
+                .collect(Collectors.toList());
 
         if (result.size() < 1) {
             return ResponseHandler.generateResponse("No Transactions found ", HttpStatus.NOT_FOUND, result);
         }
 
-        return ResponseHandler.generateResponse("Fetched Transactions successfully" , HttpStatus.OK,
+        return ResponseHandler.generateResponse("Fetched Transactions successfully", HttpStatus.OK,
                 result, pagingTransactions.getNumber(), pagingTransactions.getTotalPages());
     }
 }

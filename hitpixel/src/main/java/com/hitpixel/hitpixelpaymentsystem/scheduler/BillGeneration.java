@@ -22,7 +22,6 @@ public class BillGeneration {
      * Bills will go to negative value which will mean to refund to the customer, but better solution can be provided
      * Keeping it very simple for  scope of the interview
      */
-
     @Scheduled(cron = "@daily")
     public void dailyGenerateBill() {
         log.info("============ Started to process DAILY BILL  generation ========");

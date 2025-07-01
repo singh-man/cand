@@ -54,7 +54,7 @@ class PopulateTransactionDB {
                     .filter(c -> c.isMyAccount(t.toAccount.account_number, t.toAccount.routing_number))
                     .findFirst()
                     .orElse(new Customer(Customer.UNKNOWN));
-            UniqueTransaction uniqueTransaction = new UniqueTransaction();
+            var uniqueTransaction = new UniqueTransaction();
             uniqueTransaction.populateUniqueTransaction(t);
             uniqueTransaction.setCustomerName(customer.getFullName());
             try {
@@ -71,18 +71,20 @@ class PopulateTransactionDB {
     }
 
     private <T> T readFileAndPrepareObject(Path p, Class<T> glass) throws IOException {
-        Reader reader = Files.newBufferedReader(p);
+        var reader = Files.newBufferedReader(p);
         return new ObjectMapper().readValue(reader, glass);
     }
 
     @Async
     public void process(List<Customer> customers, Set<UniqueTransaction> uniqueTransactions) {
         Set<UniqueTransaction> totalKnownCustomers = new HashSet<>();
-        for (Customer c : customers) {
-            Set<UniqueTransaction> knownCustomerTrans = transactionService.getCustomerTransaction(c.getFullName());
+        for (var customer : customers) {
+            Set<UniqueTransaction> knownCustomerTrans = transactionService.getCustomerTransaction(customer.getFullName());
             totalKnownCustomers.addAll(knownCustomerTrans);
-            BigDecimal sum = knownCustomerTrans.stream().map(e -> e.getAmount()).reduce(BigDecimal.valueOf(0), BigDecimal::add);
-            System.out.println(String.format("Balance for %s: count=%d sum=%.2f USD", c.getFullName(),
+            BigDecimal sum = knownCustomerTrans.stream()
+                    .map(e -> e.getAmount())
+                    .reduce(BigDecimal.valueOf(0), BigDecimal::add);
+            System.out.println(String.format("Balance for %s: count=%d sum=%.2f USD", customer.getFullName(),
                     knownCustomerTrans.size(), sum));
         }
         Set<UniqueTransaction> unknownCustomers = transactionService.getUnknownCustomerTransaction();
