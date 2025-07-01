@@ -80,7 +80,7 @@ public class CustomerService implements ICustomerService {
         Customer customerAccountDetails = getCustomerAccountDetails(name);
         if (customerAccountDetails != null) {
             // find bank with highest balance or use the first available bank
-            Bank bank = customerAccountDetails.getAccounts().stream()
+            var bank = customerAccountDetails.getAccounts().stream()
                     .min((o1, o2) -> o1.getBalance().compareTo(o1.getBalance()))
                     .orElse(customerAccountDetails.getAccounts().iterator().next());
             bank.setBalance(bank.getBalance().add(BigDecimal.valueOf(amt)));
@@ -98,7 +98,7 @@ public class CustomerService implements ICustomerService {
     }
 
     private <T> T readFileAndPrepareObject(Path p, Class<T> glass) throws IOException {
-        Reader reader = Files.newBufferedReader(p);
+        var reader = Files.newBufferedReader(p);
         return new ObjectMapper().readValue(reader, glass);
     }
 
