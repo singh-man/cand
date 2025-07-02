@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 import static com.zinkworks.atmmachine.enums.CurrencyEnum.TEN;
 
 @Component("ten")
-public class DispenseNoteTen implements NoteDispenser {
+public class DispenseNoteTen implements INoteDispenser {
 
-	private NoteDispenser nextDispenser;
+	private INoteDispenser nextDispenser;
 
 	@Override
 	public DispenserResult dispense(final ATM atmDetails, final DispenserResult dispenserResult) {
@@ -37,7 +37,7 @@ public class DispenseNoteTen implements NoteDispenser {
 	}
 
 	@Override
-	public void nextDispenser(final NoteDispenser nextDispenser) {
+	public void nextDispenser(final INoteDispenser nextDispenser) {
 		this.nextDispenser = nextDispenser;
 	}
 

@@ -31,10 +31,10 @@ public class AtmMachineApplication {
     }
 
     @Bean("allNotes")
-    public NoteDispenser currencyDispenser(@Qualifier("fifty") NoteDispenser dispenseNoteFifty,
-                                           @Qualifier("twenty") NoteDispenser dispenseNoteTwenty,
-                                           @Qualifier("ten") NoteDispenser dispenseNoteTen,
-                                           @Qualifier("five") NoteDispenser dispenseNoteFive) {
+    public INoteDispenser currencyDispenser(@Qualifier("fifty") INoteDispenser dispenseNoteFifty,
+                                            @Qualifier("twenty") INoteDispenser dispenseNoteTwenty,
+                                            @Qualifier("ten") INoteDispenser dispenseNoteTen,
+                                            @Qualifier("five") INoteDispenser dispenseNoteFive) {
         dispenseNoteFifty.nextDispenser(dispenseNoteTwenty);
         dispenseNoteTwenty.nextDispenser(dispenseNoteTen);
         dispenseNoteTen.nextDispenser(dispenseNoteFive);
@@ -43,10 +43,10 @@ public class AtmMachineApplication {
     }
 
     @Bean(name = "chainedCurrencyDispenser")
-    public Function<DispenserResult_2, DispenserResult_2> chainedCurrencyDispenser(@Qualifier("fifty") NoteDispenser dispenseNoteFifty,
-                                                                                   @Qualifier("twenty") NoteDispenser dispenseNoteTwenty,
-                                                                                   @Qualifier("ten") NoteDispenser dispenseNoteTen,
-                                                                                   @Qualifier("five") NoteDispenser dispenseNoteFive) {
+    public Function<DispenserResult_2, DispenserResult_2> chainedCurrencyDispenser(@Qualifier("fifty") INoteDispenser dispenseNoteFifty,
+                                                                                   @Qualifier("twenty") INoteDispenser dispenseNoteTwenty,
+                                                                                   @Qualifier("ten") INoteDispenser dispenseNoteTen,
+                                                                                   @Qualifier("five") INoteDispenser dispenseNoteFive) {
         Function<DispenserResult_2, DispenserResult_2> fifty = a -> dispenseNoteFifty.dispense(a);
         Function<DispenserResult_2, DispenserResult_2> twenty = a -> dispenseNoteTwenty.dispense(a);
         Function<DispenserResult_2, DispenserResult_2> ten = a -> dispenseNoteTen.dispense(a);
