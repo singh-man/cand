@@ -10,9 +10,9 @@ import static com.zinkworks.atmmachine.enums.CurrencyEnum.FIFTY;
  * @author Manish.Singh
  */
 @Component("fifty")
-public class DispenseNoteFifty implements NoteDispenser {
+public class DispenseNoteFifty implements INoteDispenser {
 
-	private NoteDispenser nextDispenser;
+	private INoteDispenser nextDispenser;
 
 	@Override
 	public DispenserResult dispense(final ATM atmDetails, final DispenserResult dispenserResult) {
@@ -40,7 +40,7 @@ public class DispenseNoteFifty implements NoteDispenser {
 	}
 
 	@Override
-	public void nextDispenser(final NoteDispenser nextDispenser) {
+	public void nextDispenser(final INoteDispenser nextDispenser) {
 		this.nextDispenser = nextDispenser;
 	}
 

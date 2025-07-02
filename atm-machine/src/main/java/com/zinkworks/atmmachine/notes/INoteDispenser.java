@@ -13,9 +13,9 @@ import java.util.function.Supplier;
  * @author Manish.Singh
  *
  */
-public interface NoteDispenser {
+public interface INoteDispenser {
 
-	void nextDispenser(NoteDispenser nextDispenser);
+	void nextDispenser(INoteDispenser nextDispenser);
 
 	DispenserResult dispense(final ATM atmDetails, final DispenserResult dispenserResult);
 

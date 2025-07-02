@@ -10,7 +10,7 @@ import com.zinkworks.atmmachine.exception.EntityNotFoundException;
 import com.zinkworks.atmmachine.exception.ValidationException;
 import com.zinkworks.atmmachine.notes.DispenserResult;
 import com.zinkworks.atmmachine.notes.DispenserResult_2;
-import com.zinkworks.atmmachine.notes.NoteDispenser;
+import com.zinkworks.atmmachine.notes.INoteDispenser;
 import com.zinkworks.atmmachine.notes.WithdrawalRequest;
 import com.zinkworks.atmmachine.repository.ATMRepository;
 import com.zinkworks.atmmachine.repository.UserAccountRepository;
@@ -28,12 +28,12 @@ import java.util.function.Function;
 public class ATMService {
 
     private final ATMRepository atmRepository;
-    private final NoteDispenser noteDispenser;
+    private final INoteDispenser noteDispenser;
     private final UserAccountRepository userAccountRepository;
     private Function<DispenserResult_2, DispenserResult_2> dis;
 
     public ATMService(final ATMRepository atmRepository, UserAccountRepository userAccountRepository,
-                      @Qualifier("allNotes") NoteDispenser noteDispenser,
+                      @Qualifier("allNotes") INoteDispenser noteDispenser,
                       @Qualifier("chainedCurrencyDispenser") Function<DispenserResult_2, DispenserResult_2> dis) {
         this.atmRepository = atmRepository;
         this.noteDispenser = noteDispenser;
