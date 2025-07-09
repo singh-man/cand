@@ -81,9 +81,9 @@ public class BillingGenerationServiceImpl implements IBillGenerationService {
         } else {
             for (Transaction trans : transactions.getContent()) {
 
-                if (trans.getStatus().equalsIgnoreCase(Constants.APPROVED)) {
+                if (Constants.APPROVED.equalsIgnoreCase(trans.getStatus())) {
                     totalBill += client.getFees();
-                } else if (trans.getStatus().equalsIgnoreCase(Constants.REFUNDED)) {
+                } else if (Constants.REFUNDED.equalsIgnoreCase(trans.getStatus())) {
                     totalBill -= client.getFees();
                 } else {
                     log.error("Unknown Transaction status {}", trans.getStatus());

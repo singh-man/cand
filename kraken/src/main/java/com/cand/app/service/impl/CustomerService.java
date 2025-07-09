@@ -42,7 +42,7 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public Customer getCustomerAccountDetails(String name) throws CustomerException {
-        log.info("Getting customer account details : " + name);
+        log.info("Getting customer account details : {}", name);
         return Optional.ofNullable(customerRep.findByFullName(name)).orElseThrow(() -> new CustomerException(Message.CUSTOMER_NOT_FOUND));
     }
 
@@ -88,7 +88,7 @@ public class CustomerService implements ICustomerService {
             log.info(String.format("Added amount %f to customer's account with highest balance. %s", amt, name));
             return true;
         }
-        log.info(String.format("Customer %s not found. No amount was added!!", name));
+        log.info("Customer {} not found. No amount was added!!", name);
         return false;
     }
 
@@ -110,7 +110,7 @@ public class CustomerService implements ICustomerService {
             try {
                 customers.addAll(readFileAndPrepareObject(c, JsonCustomer.class).customers);
             } catch (IOException ex) {
-                log.error("Failed to load customers file better to exist the processing!! : " + ex.getLocalizedMessage());
+                log.error("Failed to load customers file better to exit the processing!! : {}", ex.getLocalizedMessage());
                 System.exit(0);
             }
         }

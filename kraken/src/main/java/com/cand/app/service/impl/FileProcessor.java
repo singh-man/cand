@@ -57,7 +57,7 @@ public class FileProcessor {
         try {
             allFiles = Files.walk(path).filter(e -> Files.isRegularFile(e)).collect(Collectors.toList());
         } catch (IOException e) {
-            log.error("Failed to load files from given path \n Continuing for now: " + e.getLocalizedMessage());
+            log.error("Failed to load files from given path \n Continuing for now: {}", e.getLocalizedMessage());
         }
         List<Path> customerFiles = new ArrayList<>();
         List<Path> transFiles = new ArrayList<>();

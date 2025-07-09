@@ -45,7 +45,7 @@ public class TransactionServiceImpl implements ITransactionService {
         Transaction transaction;
 
         // add transaction for active clients only
-        if (client.isPresent() && client.get().getStatus().equalsIgnoreCase("active")) {
+        if (client.isPresent() && "active".equalsIgnoreCase(client.get().getStatus())) {
             transaction = modelMapper.map(transactionDAO, Transaction.class);
             // Will have reference of client ID in the transaction rather than the full client object
             transaction.setClientId(client.get().getId());
@@ -78,7 +78,7 @@ public class TransactionServiceImpl implements ITransactionService {
      */
     @Override
     public boolean updateTransactionBillStatus(Long id) {
-        log.info("Check if the transaction {} exists in the database", id);
+        log.info("Updating transaction {} in the database", id);
         Optional<Transaction> transaction = transactionRepo.findById(id);
         return transaction
                 .map(e -> {
@@ -109,7 +109,7 @@ public class TransactionServiceImpl implements ITransactionService {
      */
     @Override
     public boolean delete(Long id) {
-        log.info("Check if the transaction {} exists in the database", id);
+        log.info("Delete transaction {} in the database", id);
         Optional<Transaction> transaction = transactionRepo.findById(id);
         return transaction
                 .map(e -> {
