@@ -7,9 +7,7 @@ import com.zinkworks.atmmachine.entity.UserAccount;
 
 
 /**
- * 
  * @author Manish.Singh
- *
  */
 @Repository
 public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {
