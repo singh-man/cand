@@ -41,7 +41,7 @@ public class ATMService {
     }
 
     /**
-     * Method Debit money from User Account
+     * Debit money from User Account
      *
      * @param withdrawalRequest
      */
