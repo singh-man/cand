@@ -9,7 +9,6 @@ import com.zinkworks.atmmachine.enums.ExceptionMessageEnum;
 import com.zinkworks.atmmachine.exception.EntityNotFoundException;
 import com.zinkworks.atmmachine.exception.ValidationException;
 import com.zinkworks.atmmachine.notes.DispenserResult;
-import com.zinkworks.atmmachine.notes.DispenserResult_2;
 import com.zinkworks.atmmachine.notes.INoteDispenser;
 import com.zinkworks.atmmachine.notes.WithdrawalRequest;
 import com.zinkworks.atmmachine.repository.ATMRepository;
@@ -18,8 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * @author Manish.Singh
@@ -28,17 +26,14 @@ import java.util.function.Function;
 public class ATMService {
 
     private final ATMRepository atmRepository;
-    private final INoteDispenser noteDispenser;
+    private final Stream<INoteDispenser> noteDispenser;
     private final UserAccountRepository userAccountRepository;
-    private Function<DispenserResult_2, DispenserResult_2> dis;
 
     public ATMService(final ATMRepository atmRepository, UserAccountRepository userAccountRepository,
-                      @Qualifier("allNotes") INoteDispenser noteDispenser,
-                      @Qualifier("chainedCurrencyDispenser") Function<DispenserResult_2, DispenserResult_2> dis) {
+                      @Qualifier("allNotesDispenser") Stream<INoteDispenser> noteDispenser) {
         this.atmRepository = atmRepository;
         this.noteDispenser = noteDispenser;
         this.userAccountRepository = userAccountRepository;
-        this.dis = dis;
     }
 
     public ATM initializeAmountInATM(final ATM atm) {
@@ -49,12 +44,11 @@ public class ATMService {
      * Method Debit money from User Account
      *
      * @param withdrawalRequest
-     * @return
      */
     public AccountBalanceDTO debitFromAccount(final WithdrawalRequest withdrawalRequest) {
         final UserAccount accountDetails = findUserAccount(withdrawalRequest.accountId());
         validatePin(withdrawalRequest.pin(), accountDetails.getPin());
-        validateMaxwithdraw(accountDetails, withdrawalRequest.amount());
+        validateMaxWithdraw(accountDetails, withdrawalRequest.amount());
         if (accountDetails.getOpeningBalance() >= withdrawalRequest.amount()) {
             accountDetails.setOpeningBalance(accountDetails.getOpeningBalance() - withdrawalRequest.amount());
         } else {
@@ -64,74 +58,53 @@ public class ATMService {
         }
         userAccountRepository.save(accountDetails);
 
-        final double maxWithdrawl = accountDetails.getOpeningBalance() + accountDetails.getOverDraft();
+        final double maxWithdrawal = accountDetails.getOpeningBalance() + accountDetails.getOverDraft();
         return new AccountBalanceDTO(accountDetails.getOpeningBalance(), accountDetails.getOverDraft(),
-                maxWithdrawl > 0 ? maxWithdrawl : 0.0);
+                maxWithdrawal > 0 ? maxWithdrawal : 0.0);
     }
 
     /**
      * Find User Account by account number
      *
      * @param accountId
-     * @return
      */
     public UserAccount findUserAccount(Long accountId) {
-        Optional<UserAccount> optional = userAccountRepository.findById(accountId);
-        if (optional.isPresent()) {
-            return optional.get();
-        }
-        throw new EntityNotFoundException(ExceptionMessageEnum.USER_DOESNT_EXIST.getMessage());
+        return userAccountRepository.findById(accountId)
+                .orElseThrow(() -> new EntityNotFoundException(ExceptionMessageEnum.USER_DOESNT_EXIST.getMessage()));
     }
 
     /**
      * Find ATM record
      *
      * @param id
-     * @return
      */
     public ATM findATM(Long id) {
-        Optional<ATM> optiona = atmRepository.findById(id);
-        if (optiona.isPresent()) {
-            return optiona.get();
-        }
-        throw new EntityNotFoundException(ExceptionMessageEnum.ATM_NOT_INITALISED.getMessage());
+        return atmRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(ExceptionMessageEnum.ATM_NOT_INITALISED.getMessage()));
     }
 
     /**
      * Withdraw Amount from user, also update ATM status
      *
      * @param withdrawalRequest
-     * @return
      */
     public TransactionDTO withdrawAmount(final WithdrawalRequest withdrawalRequest) {
         final ATM atm = findATM(1L);
         final TransactionDTO transactionDetails = new TransactionDTO();
-        final DispenserResult dispenserResult = noteDispenser.dispense(atm,
-                initializeDispenserResult(withdrawalRequest.amount()));
-
+        DispenserResult dispenserResult = initializeDispenserResult(withdrawalRequest.amount());
+        long count = noteDispenser
+                .map(e -> e.dispense(atm, dispenserResult))
+                .filter(e -> e.getAmtBalance() > 0)
+                .count();
         transactionDetails.setDispensedCashDto(dispenserResult.getDispensedCashDTO());
-        validateAtmNoteAvilability(dispenserResult.getDispensedCashDTO().getMoneyCount(),
+        validateAtmNoteAvailability(dispenserResult.getDispensedCashDTO().getMoneyCount(),
                 withdrawalRequest.amount());
         transactionDetails.setAccountBalanceDto(debitAccountBalance(withdrawalRequest));
         updateATM(atm);
         return transactionDetails;
     }
 
-    public TransactionDTO withdrawAmount_2(final WithdrawalRequest withdrawalRequest) {
-        final ATM atm = findATM(1L);
-        final TransactionDTO transactionDetails = new TransactionDTO();
-
-        DispenserResult_2 apply = this.dis.apply(new DispenserResult_2(atm, initializeDispenserResult(withdrawalRequest.amount())));
-
-        transactionDetails.setDispensedCashDto(apply.result().getDispensedCashDTO());
-        validateAtmNoteAvilability(apply.result().getDispensedCashDTO().getMoneyCount(),
-                withdrawalRequest.amount());
-        transactionDetails.setAccountBalanceDto(debitAccountBalance(withdrawalRequest));
-        updateATM(atm);
-        return transactionDetails;
-    }
-
-    private void validateMaxwithdraw(UserAccount accountDetails, long withdrawAmount) {
+    private void validateMaxWithdraw(UserAccount accountDetails, long withdrawAmount) {
         double currentBalance = accountDetails.getOpeningBalance();
         double overdraft = accountDetails.getOverDraft();
         double maxAllowed = currentBalance + overdraft;
@@ -147,8 +120,8 @@ public class ATMService {
         }
     }
 
-    private void validateAtmNoteAvilability(final double dispensedAmount, final int withdrawlRequestAmount) {
-        if (dispensedAmount < withdrawlRequestAmount) {
+    private void validateAtmNoteAvailability(final double dispensedAmount, final int withdrawalRequestAmount) {
+        if (dispensedAmount < withdrawalRequestAmount) {
             throw new ValidationException(HttpStatus.UNAUTHORIZED, ExceptionMessageEnum.ATM_HAS_NO_CASH.getMessage());
         }
     }
@@ -173,9 +146,9 @@ public class ATMService {
     }
 
     private AccountBalanceDTO getAccountBalance(final UserAccount account) {
-        final double maxWithdrwalAmount = account.getOpeningBalance() + account.getOverDraft();
+        final double maxWithdrawalAmount = account.getOpeningBalance() + account.getOverDraft();
         return new AccountBalanceDTO(account.getOpeningBalance(), account.getOverDraft(),
-                maxWithdrwalAmount > 0 ? maxWithdrwalAmount : 0.0);
+                maxWithdrawalAmount > 0 ? maxWithdrawalAmount : 0.0);
     }
 
     public UserAccount addAccountDetails(UserAccount newAccount) {

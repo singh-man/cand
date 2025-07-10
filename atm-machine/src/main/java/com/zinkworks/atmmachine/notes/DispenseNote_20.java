@@ -6,14 +6,10 @@ import org.springframework.stereotype.Component;
 import static com.zinkworks.atmmachine.enums.CurrencyEnum.TWENTY;
 
 /**
- * 
  * @author Manish.Singh
- *
  */
 @Component("twenty")
-public class DispenseNoteTwenty implements INoteDispenser {
-
-	private INoteDispenser nextDispenser;
+public class DispenseNote_20 implements INoteDispenser {
 
 	@Override
 	public DispenserResult dispense(final ATM atmDetails, final DispenserResult dispenserResult) {
@@ -32,34 +28,6 @@ public class DispenseNoteTwenty implements INoteDispenser {
 			}
 			dispenserResult.setAmtBalance(dispensedAmountLeft);
 		}
-
-		if (dispensedAmountLeft > 0 && nextDispenser != null) {
-			return nextDispenser.dispense(atmDetails, dispenserResult);
-		}
-
 		return dispenserResult;
-	}
-
-	@Override
-	public void nextDispenser(final INoteDispenser nextDispenser) {
-		this.nextDispenser = nextDispenser;
-	}
-
-	@Override
-	public DispenserResult_2 dispense(DispenserResult_2 dispeneserResult2) {
-		ATM atmDetails = dispeneserResult2.atm();
-		DispenserResult dispenserResult = dispeneserResult2.result();
-		int amtBal = dispenserResult.getAmtBalance();
-		if (amtBal > 0) {
-			dispense(amtBal,
-					TWENTY,
-					() -> atmDetails.getNote20(),
-					notesInATM -> atmDetails.setNote20(notesInATM),
-					(notesNeeded, amtBalance) -> {
-						dispenserResult.getDispensedCashDTO().setNote20(notesNeeded);
-						dispenserResult.setAmtBalance(amtBalance);
-					});
-		}
-		return dispeneserResult2;
 	}
 }
