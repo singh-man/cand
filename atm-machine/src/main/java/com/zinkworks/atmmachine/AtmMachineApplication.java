@@ -31,10 +31,10 @@ public class AtmMachineApplication {
     }
 
     @Bean
-    public Stream<INoteDispenser> allNotesDispenser(@Qualifier("fifty") INoteDispenser dispenseNoteFifty,
-                                                    @Qualifier("twenty") INoteDispenser dispenseNoteTwenty,
-                                                    @Qualifier("ten") INoteDispenser dispenseNoteTen,
-                                                    @Qualifier("five") INoteDispenser dispenseNoteFive) {
+    public Stream<INoteDispenser> allNotesDispenserStream(@Qualifier("fifty") INoteDispenser dispenseNoteFifty,
+                                                          @Qualifier("twenty") INoteDispenser dispenseNoteTwenty,
+                                                          @Qualifier("ten") INoteDispenser dispenseNoteTen,
+                                                          @Qualifier("five") INoteDispenser dispenseNoteFive) {
         return Stream.of(dispenseNoteFifty, dispenseNoteTwenty, dispenseNoteTen,
                 dispenseNoteFive);
     }

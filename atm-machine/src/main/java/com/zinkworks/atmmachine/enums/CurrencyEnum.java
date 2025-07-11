@@ -1,9 +1,7 @@
 package com.zinkworks.atmmachine.enums;
 
 /**
- * 
  * @author Manish.Singh
- *
  */
 public enum CurrencyEnum {
 

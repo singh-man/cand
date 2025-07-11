@@ -9,6 +9,4 @@ import com.zinkworks.atmmachine.entity.ATM;
  * @author Manish.Singh
  */
 @Repository
-public interface ATMRepository extends JpaRepository<ATM, Long> {
-
-}
+public interface ATMRepository extends JpaRepository<ATM, Long> { }
