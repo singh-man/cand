@@ -29,5 +29,4 @@ public class UserAccount {
 
     private double overDraft;
 
-
 }

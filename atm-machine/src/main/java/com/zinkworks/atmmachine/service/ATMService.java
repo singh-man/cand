@@ -30,7 +30,7 @@ public class ATMService {
     private final UserAccountRepository userAccountRepository;
 
     public ATMService(final ATMRepository atmRepository, UserAccountRepository userAccountRepository,
-                      @Qualifier("allNotesDispenser") Stream<INoteDispenser> noteDispenser) {
+                      @Qualifier("allNotesDispenserStream") Stream<INoteDispenser> noteDispenser) {
         this.atmRepository = atmRepository;
         this.noteDispenser = noteDispenser;
         this.userAccountRepository = userAccountRepository;
@@ -92,10 +92,10 @@ public class ATMService {
         final ATM atm = findATM(1L);
         final TransactionDTO transactionDetails = new TransactionDTO();
         DispenserResult dispenserResult = initializeDispenserResult(withdrawalRequest.amount());
-        long count = noteDispenser
+        noteDispenser
                 .map(e -> e.dispense(atm, dispenserResult))
                 .filter(e -> e.getAmtBalance() > 0)
-                .count();
+                .forEach(e -> { });
         transactionDetails.setDispensedCashDto(dispenserResult.getDispensedCashDTO());
         validateAtmNoteAvailability(dispenserResult.getDispensedCashDTO().getMoneyCount(),
                 withdrawalRequest.amount());
@@ -131,8 +131,7 @@ public class ATMService {
     }
 
     private AccountBalanceDTO debitAccountBalance(final WithdrawalRequest withdrawalRequest) {
-        final AccountBalanceDTO accountBalance = debitFromAccount(withdrawalRequest);
-        return accountBalance;
+        return debitFromAccount(withdrawalRequest);
     }
 
     private void updateATM(final ATM atm) {
