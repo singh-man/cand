@@ -30,7 +30,7 @@ public class ATMService {
     private final UserAccountRepository userAccountRepository;
 
     public ATMService(final ATMRepository atmRepository, UserAccountRepository userAccountRepository,
-                      @Qualifier("allNotesDispenserStream") Stream<INoteDispenser> noteDispenser) {
+                      @Qualifier("allNotesDispenser") Stream<INoteDispenser> noteDispenser) {
         this.atmRepository = atmRepository;
         this.noteDispenser = noteDispenser;
         this.userAccountRepository = userAccountRepository;
