@@ -31,7 +31,7 @@ public class AtmMachineApplication {
     }
 
     @Bean
-    public Stream<INoteDispenser> allNotesDispenserStream(@Qualifier("fifty") INoteDispenser dispenseNoteFifty,
+    public Stream<INoteDispenser> allNotesDispenser(@Qualifier("fifty") INoteDispenser dispenseNoteFifty,
                                                           @Qualifier("twenty") INoteDispenser dispenseNoteTwenty,
                                                           @Qualifier("ten") INoteDispenser dispenseNoteTen,
                                                           @Qualifier("five") INoteDispenser dispenseNoteFive) {
