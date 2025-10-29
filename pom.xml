@@ -8,10 +8,10 @@
     <artifactId>assessment</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <description>different assessment</description>
+    <description>spring boot cand and more</description>
     <name>cand</name>
     <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+    <url>https://github.com/singh-man/cand</url>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -27,10 +27,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -64,10 +60,10 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>lloyds</module>
+                <module>atm-machine</module>
                 <module>hitpixel</module>
                 <module>kraken</module>
-                <module>atm-machine</module>
+                <module>lloyds</module>
             </modules>
         </profile>
     </profiles>

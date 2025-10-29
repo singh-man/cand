@@ -22,7 +22,7 @@ public class ATMController {
     private final ATMService atmService;
 
     @PostMapping
-    public ResponseEntity<ATM> initializeAmountinATM(@RequestBody final ATM atmDetails) {
+    public ResponseEntity<ATM> initializeAmountInATM(@RequestBody final ATM atmDetails) {
         return new ResponseEntity<>(atmService.initializeAmountInATM(atmDetails), HttpStatus.CREATED);
     }
 

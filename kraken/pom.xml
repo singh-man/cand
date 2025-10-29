@@ -8,19 +8,23 @@
         <groupId>com.cand</groupId>
         <artifactId>assessment</artifactId>
         <version>1.0.0-SNAPSHOT</version>
-        <!--        <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
+<!--        <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
     </parent>
 
-    <!--    <groupId>com.cand.app</groupId>-->
+<!--    <groupId>com.cand.app</groupId>-->
     <artifactId>kraken</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <description>make payments to star trek employees</description>
 
     <name>kraken</name>
     <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+<!--        <url>http://www.example.com</url>-->
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -44,6 +48,7 @@
             <version>${openapi.version}</version>
         </dependency>
 
+        <!-- Security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>

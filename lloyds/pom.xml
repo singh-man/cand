@@ -18,9 +18,13 @@
 
     <name>lloyds</name>
     <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+<!--    <url>http://www.example.com</url>-->
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <!--Swagger-->
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -34,6 +38,14 @@
             <plugin> <!--prepares fat jar-->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
