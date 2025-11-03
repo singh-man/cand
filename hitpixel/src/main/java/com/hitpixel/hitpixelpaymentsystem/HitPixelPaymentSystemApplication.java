@@ -14,7 +14,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @SpringBootApplication
-@Configuration
 @EnableScheduling
 @Slf4j
 public class HitPixelPaymentSystemApplication {
