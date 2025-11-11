@@ -59,4 +59,16 @@ public class TimeTest {
         Assertions.assertThrows(HumanReadTimeException.class, () -> new HumanReadableTime().processTime_2(12, 230));
         Assertions.assertEquals("Quarter past zero", new HumanReadableTime().processTime_2(00, 15));
     }
+
+    @Test
+    public void testProcessTime_3() {
+        var time = new HumanReadableTime();
+        Assertions.assertThrows(HumanReadTimeException.class, () -> time.processTime_3(-1, 10));
+        Assertions.assertThrows(HumanReadTimeException.class, () -> time.processTime_3(1, -1));
+        Assertions.assertThrows(HumanReadTimeException.class, () -> time.processTime_3(-1, -1));
+
+        Assertions.assertThrows(HumanReadTimeException.class, () -> time.processTime_3(120, 23));
+        Assertions.assertThrows(HumanReadTimeException.class, () -> time.processTime_3(12, 230));
+        Assertions.assertEquals("Quarter past zero", time.processTime_3(00, 15));
+    }
 }
