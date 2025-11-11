@@ -9,6 +9,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 @Component
@@ -38,7 +39,6 @@ public class HumanReadableTime implements IHumanReadableTime {
         return humanReadTime;
     }
 
-
     @Override
     public String getTime() {
         DateTimeFormatter dtfTime = DateTimeFormatter.ofPattern("HH:mm");
@@ -59,6 +59,9 @@ public class HumanReadableTime implements IHumanReadableTime {
         return processTime(hour, minute);
     }
 
+    /**
+     * Chain of Responsibility
+     */
     public String processTime_2(final int hour, int minute) {
         validate(hour, minute);
         BiFunction<Integer, Integer, Optional<String>> _0      = (h, m) -> m == 0 ? Optional.of(clock[h] + " o'clock") : Optional.empty();
@@ -73,6 +76,26 @@ public class HumanReadableTime implements IHumanReadableTime {
                 .filter(e -> e.isPresent())
                 .map(e -> e.get())
                 .findFirst();
+        return time.get();
+    }
+
+    /**
+     * Chain of Responsibility
+     */
+    public String processTime_3(final int hour, int minute) {
+        validate(hour, minute);
+        Function<Integer, Optional<String>> _0      = m -> m == 0 ? Optional.of(clock[hour] + " o'clock") : Optional.empty();
+        Function<Integer, Optional<String>> _15     = m -> m == 15 ? Optional.of("Quarter past " + clock[hour].toLowerCase()) : Optional.empty();
+        Function<Integer, Optional<String>> _30     = m -> m == 30 ? Optional.of("Half past " + clock[hour].toLowerCase()) : Optional.empty();
+        Function<Integer, Optional<String>> _45     = m -> m == 45 ? Optional.of("Quarter to " + clock[(hour % 12) + 1].toLowerCase()) : Optional.empty();
+        Function<Integer, Optional<String>> _1to29  = m -> m >= 1 && m <= 29 ? Optional.of(clock[m] + " past " + clock[hour].toLowerCase()) : Optional.empty();
+        Function<Integer, Optional<String>> _31to59 = m -> m > 30 && m < 60 ? Optional.of(clock[60 - m] + " to " + clock[hour + 1].toLowerCase()) : Optional.empty();
+
+        var time = Stream.of(_0, _15, _30, _45, _1to29, _31to59)
+                .map(e -> e.apply(minute))
+                .filter(e -> e.isPresent())
+                .findFirst()
+                .get();
         return time.get();
     }
 }
