@@ -9,7 +9,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 @Component
@@ -49,8 +48,10 @@ public class HumanReadableTime implements IHumanReadableTime {
     }
 
     private void validate(int hour, int minute) {
-        if (hour < 0 || hour > 24) throw new HumanReadTimeException("Invalid hour");
-        if (minute < 0 || minute > 60) throw new HumanReadTimeException("Invalid minutes");
+        if (hour < 0 || hour > 24)
+            throw new HumanReadTimeException("Invalid hour");
+        if (minute < 0 || minute > 60)
+            throw new HumanReadTimeException("Invalid minutes");
     }
 
     @Override
@@ -59,17 +60,21 @@ public class HumanReadableTime implements IHumanReadableTime {
         return processTime(hour, minute);
     }
 
-    /**
-     * Chain of Responsibility
-     */
     public String processTime_2(final int hour, int minute) {
         validate(hour, minute);
-        BiFunction<Integer, Integer, Optional<String>> _0      = (h, m) -> m == 0 ? Optional.of(clock[h] + " o'clock") : Optional.empty();
-        BiFunction<Integer, Integer, Optional<String>> _15     = (h, m) -> m == 15 ? Optional.of("Quarter past " + clock[h].toLowerCase()) : Optional.empty();
-        BiFunction<Integer, Integer, Optional<String>> _30     = (h, m) -> m == 30 ? Optional.of("Half past " + clock[h].toLowerCase()) : Optional.empty();
-        BiFunction<Integer, Integer, Optional<String>> _45     = (h, m) -> m == 45 ? Optional.of("Quarter to " + clock[(h % 12) + 1].toLowerCase()) : Optional.empty();
-        BiFunction<Integer, Integer, Optional<String>> _1to29  = (h, m) -> m >= 1 && m <= 29 ? Optional.of(clock[m] + " past " + clock[h].toLowerCase()) : Optional.empty();
-        BiFunction<Integer, Integer, Optional<String>> _31to59 = (h, m) -> m > 30 && m < 60 ? Optional.of(clock[60 - m] + " to " + clock[h + 1].toLowerCase()) : Optional.empty();
+        BiFunction<Integer, Integer, Optional<String>> _0 = (h, m) -> m == 0 ? Optional.of(clock[h] + " o'clock")
+                : Optional.empty();
+        BiFunction<Integer, Integer, Optional<String>> _15 = (h,
+                m) -> m == 15 ? Optional.of("Quarter past " + clock[h].toLowerCase()) : Optional.empty();
+        BiFunction<Integer, Integer, Optional<String>> _30 = (h,
+                m) -> m == 30 ? Optional.of("Half past " + clock[h].toLowerCase()) : Optional.empty();
+        BiFunction<Integer, Integer, Optional<String>> _45 = (h,
+                m) -> m == 45 ? Optional.of("Quarter to " + clock[(h % 12) + 1].toLowerCase()) : Optional.empty();
+        BiFunction<Integer, Integer, Optional<String>> _1to29 = (h,
+                m) -> m >= 1 && m <= 29 ? Optional.of(clock[m] + " past " + clock[h].toLowerCase()) : Optional.empty();
+        BiFunction<Integer, Integer, Optional<String>> _31to59 = (h, m) -> m > 30 && m < 60
+                ? Optional.of(clock[60 - m] + " to " + clock[h + 1].toLowerCase())
+                : Optional.empty();
 
         var time = Stream.of(_0, _15, _30, _45, _1to29, _31to59)
                 .map(e -> e.apply(hour > 12 ? hour - 12 : hour, minute))
@@ -79,23 +84,8 @@ public class HumanReadableTime implements IHumanReadableTime {
         return time.get();
     }
 
-    /**
-     * Chain of Responsibility
-     */
-    public String processTime_3(final int hour, int minute) {
+    public String processTime_3(int hour, int minute) {
         validate(hour, minute);
-        Function<Integer, Optional<String>> _0      = m -> m == 0 ? Optional.of(clock[hour] + " o'clock") : Optional.empty();
-        Function<Integer, Optional<String>> _15     = m -> m == 15 ? Optional.of("Quarter past " + clock[hour].toLowerCase()) : Optional.empty();
-        Function<Integer, Optional<String>> _30     = m -> m == 30 ? Optional.of("Half past " + clock[hour].toLowerCase()) : Optional.empty();
-        Function<Integer, Optional<String>> _45     = m -> m == 45 ? Optional.of("Quarter to " + clock[(hour % 12) + 1].toLowerCase()) : Optional.empty();
-        Function<Integer, Optional<String>> _1to29  = m -> m >= 1 && m <= 29 ? Optional.of(clock[m] + " past " + clock[hour].toLowerCase()) : Optional.empty();
-        Function<Integer, Optional<String>> _31to59 = m -> m > 30 && m < 60 ? Optional.of(clock[60 - m] + " to " + clock[hour + 1].toLowerCase()) : Optional.empty();
-
-        var time = Stream.of(_0, _15, _30, _45, _1to29, _31to59)
-                .map(e -> e.apply(minute))
-                .filter(e -> e.isPresent())
-                .findFirst()
-                .get();
-        return time.get();
+        return processTime(hour, minute);
     }
 }
