@@ -40,35 +40,38 @@ public class TimeTest {
 
     @Test
     public void testWrongTime() {
-        Assertions.assertThrows(HumanReadTimeException.class, () -> time.getTime(-1, 10));
-        Assertions.assertThrows(HumanReadTimeException.class, () -> time.getTime(1, -1));
-        Assertions.assertThrows(HumanReadTimeException.class, () -> time.getTime(-1, -1));
+        exception(-1, 10);
+        exception(1, -1);
+        exception(-1, -1);
 
-        Assertions.assertThrows(HumanReadTimeException.class, () -> time.getTime(120, 23));
-        Assertions.assertThrows(HumanReadTimeException.class, () -> time.getTime(12, 230));
+        exception(120, 23);
+        exception(12, 230);
         Assertions.assertEquals("Quarter past zero", time.getTime(00, 15));
     }
 
     @Test
     public void testProcessTime_2() {
-        Assertions.assertThrows(HumanReadTimeException.class, () -> new HumanReadableTime().processTime_2(-1, 10));
-        Assertions.assertThrows(HumanReadTimeException.class, () -> new HumanReadableTime().processTime_2(1, -1));
-        Assertions.assertThrows(HumanReadTimeException.class, () -> new HumanReadableTime().processTime_2(-1, -1));
-
-        Assertions.assertThrows(HumanReadTimeException.class, () -> new HumanReadableTime().processTime_2(120, 23));
-        Assertions.assertThrows(HumanReadTimeException.class, () -> new HumanReadableTime().processTime_2(12, 230));
+        exception(-1, 10);
+        exception(1, -1);
+        exception(-1, -1);
+        exception(120, 23);
+        exception(12, 230);
         Assertions.assertEquals("Quarter past zero", new HumanReadableTime().processTime_2(00, 15));
     }
 
     @Test
     public void testProcessTime_3() {
         var time = new HumanReadableTime();
-        Assertions.assertThrows(HumanReadTimeException.class, () -> time.processTime_3(-1, 10));
-        Assertions.assertThrows(HumanReadTimeException.class, () -> time.processTime_3(1, -1));
-        Assertions.assertThrows(HumanReadTimeException.class, () -> time.processTime_3(-1, -1));
-
-        Assertions.assertThrows(HumanReadTimeException.class, () -> time.processTime_3(120, 23));
-        Assertions.assertThrows(HumanReadTimeException.class, () -> time.processTime_3(12, 230));
+        exception(-1, 10);
+        exception(1, -1);
+        exception(-1, -1);
+        exception(120, 23);
+        exception(12, 230);
         Assertions.assertEquals("Quarter past zero", time.processTime_3(00, 15));
+    }
+
+    private HumanReadTimeException exception(int hour, int minute) {
+        var time = new HumanReadableTime();
+        return Assertions.assertThrows(HumanReadTimeException.class, () -> time.processTime_3(-1, 10));
     }
 }
