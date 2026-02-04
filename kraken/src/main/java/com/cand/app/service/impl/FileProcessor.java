@@ -52,7 +52,7 @@ public class FileProcessor {
 
     @PostConstruct
     private void init() {
-        var path = Paths.get("./data/");
+        var path = Paths.get("./kraken/data/");
         List<Path> allFiles = null;
         try {
             allFiles = Files.walk(path).filter(e -> Files.isRegularFile(e)).collect(Collectors.toList());

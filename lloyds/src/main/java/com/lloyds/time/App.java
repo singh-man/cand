@@ -3,13 +3,16 @@
  */
 package com.lloyds.time;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.function.Function;
 
 @SpringBootApplication
 public class App {
@@ -31,5 +34,26 @@ public class App {
         System.out.println(String.format("Using Spring-Doc-OpenAPI- \n" +
                 "http://%s:%s/v3/api-docs/ \n" +
                 "http://%s:%s/swagger-ui/index.html \n", this.host, port, this.host, port));
+    }
+
+    @Bean(name = "hello")
+    public Function<String, String> hello() {
+        return x -> x+ "hello";
+    }
+
+    @Bean(name = "world")
+    public Function<String, String> world() {
+        return x -> x+ "world";
+    }
+
+    /**
+     * Function chained bean used for injection
+     * @param hello
+     * @param world
+     * @return
+     */
+    @Bean(name = "combined")
+    public Function<String, String> helloWorld(@Qualifier("hello") Function<String, String> hello, @Qualifier("world") Function<String, String> world) {
+        return hello().andThen(world());
     }
 }
