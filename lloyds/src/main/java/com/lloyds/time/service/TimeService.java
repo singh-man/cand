@@ -17,7 +17,7 @@ public class TimeService implements ITimeService {
 
     public TimeService(IHumanReadableTime humanReadableTime,
                        // A chained func bean injected
-                       @Qualifier("combined") Function<String, String> func) {
+                       @Qualifier("helloWorld") Function<String, String> func) {
         this.humanReadableTime = humanReadableTime;
         this.func = func;
     }
