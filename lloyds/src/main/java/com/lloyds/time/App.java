@@ -52,8 +52,8 @@ public class App {
      * @param world
      * @return
      */
-    @Bean(name = "combined")
+    @Bean
     public Function<String, String> helloWorld(@Qualifier("hello") Function<String, String> hello, @Qualifier("world") Function<String, String> world) {
-        return hello().andThen(world());
+        return hello.andThen(world);
     }
 }
