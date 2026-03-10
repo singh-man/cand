@@ -13,18 +13,18 @@ public class TimeService implements ITimeService {
 
     private IHumanReadableTime humanReadableTime;
 
-    private Function<String, String> func;
+    private Function<String, String> funcChain;
 
     public TimeService(IHumanReadableTime humanReadableTime,
                        // A chained func bean injected
                        @Qualifier("helloWorld") Function<String, String> func) {
         this.humanReadableTime = humanReadableTime;
-        this.func = func;
+        this.funcChain = func;
     }
 
     @Override
     public String getTime(String time) {
-        String apply = func.apply(time);
+        String apply = funcChain.apply(time);
         System.out.println(apply);
         if (time == null) {
             return humanReadableTime.getTime();
