@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.retry.annotation.EnableRetry;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
@@ -16,6 +17,7 @@ import java.net.UnknownHostException;
 import java.util.function.Function;
 
 @SpringBootApplication
+@EnableRetry
 public class App {
     @Value("${server.port}")
     private String port;
