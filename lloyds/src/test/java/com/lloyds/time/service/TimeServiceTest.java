@@ -16,9 +16,8 @@ public class TimeServiceTest {
 
     @BeforeEach
     public void setUp() {
-        timeService = new TimeService();
         humanReadableTime = Mockito.mock(IHumanReadableTime.class);
-        timeService.setHumanReadableTime(humanReadableTime);
+        timeService = new TimeService(humanReadableTime, e -> e);
     }
 
     @Test

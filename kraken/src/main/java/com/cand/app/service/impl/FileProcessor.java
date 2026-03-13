@@ -19,8 +19,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 @Slf4j
@@ -52,17 +54,22 @@ public class FileProcessor {
 
     @PostConstruct
     private void init() {
-        var path = Paths.get("./kraken/data/");
-        List<Path> allFiles = null;
-        try {
-            allFiles = Files.walk(path).filter(e -> Files.isRegularFile(e)).collect(Collectors.toList());
+        // Due to conflict between intellij classpath and maven
+        var path = Optional.of(Paths.get("./kraken/data/"))
+                .filter(Files::exists)
+                .orElse(Paths.get("./data/"));
+
+        List<Path> allFiles = new ArrayList<>();
+        try (Stream<Path> walk = Files.walk(path)) {
+            allFiles = walk.filter(Files::isRegularFile).collect(Collectors.toList());
         } catch (IOException e) {
-            log.error("Failed to load files from given path \n Continuing for now: {}", e.getLocalizedMessage());
+            log.error("Failed to load files from given path: {} \n Continuing for now: {}", path.toAbsolutePath(), e.getLocalizedMessage());
         }
+
         List<Path> customerFiles = new ArrayList<>();
         List<Path> transFiles = new ArrayList<>();
         for (Path p : allFiles) {
-            if (p.getFileName().startsWith(FileProcessor.CUSTOMER_JSON)) customerFiles.add(p);
+            if (p.getFileName().toString().startsWith(CUSTOMER_JSON)) customerFiles.add(p);
             else transFiles.add(p);
         }
         List<Customer> customers = customerService.saveAllFrom(customerFiles);
