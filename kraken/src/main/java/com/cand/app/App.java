@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -36,8 +35,11 @@ public class App {
 
     @PostConstruct
     public void init() {
-        System.out.println(String.format("Using Spring-Doc-OpenAPI- \n" +
-                "http://%s:%s/v3/api-docs/ \n" +
-                "http://%s:%s/swagger-ui/index.html \n", this.host, port, this.host, port));
+        System.out.printf("""
+                Using Spring-Doc-OpenAPI-
+                http://%s:%s/v3/api-docs/
+                http://%s:%s/swagger-ui/index.html
+
+                """, this.host, port, this.host, port);
     }
 }
