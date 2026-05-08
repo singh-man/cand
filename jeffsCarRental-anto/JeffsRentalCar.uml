@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.swissre.RentalConstants</OriginalElement>
+  <nodes>
+    <node x="546.8001808318263" y="489.3860759493671">com.swissre.RentalCostSummary</node>
+    <node x="-104.0" y="420.99005424954794">com.swissre.RentalRecord</node>
+    <node x="10.0" y="893.4060397830017">com.swissre.JeffsCarRentalApp</node>
+    <node x="546.8001808318263" y="793.5452079566003">com.swissre.RentalService</node>
+    <node x="-62.0" y="234.5">com.swissre.VehicleType</node>
+    <node x="546.8001808318263" y="645.4330922242315">com.swissre.RentalConstants</node>
+    <node x="546.8001808318263" y="213.33905967450272">com.swissre.RentalFormatUtils</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.swissre.RentalRecord" target="com.swissre.VehicleType" relationship="TO_ONE">
+      <point x="0.0" y="-177.5" />
+      <point x="109.0" y="450.5" />
+      <point x="109.0" y="450.5" />
+      <point x="0.0" y="56.5" />
+    </edge>
+    <edge source="com.swissre.JeffsCarRentalApp" target="com.swissre.RentalRecord" relationship="CREATE">
+      <point x="0.0" y="-44.5" />
+      <point x="0.0" y="177.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.6957024959742351" showDependencies="true" x="215.0000000000001" y="610.8724050632911" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

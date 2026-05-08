@@ -1,6 +1,9 @@
-# ignore all hidden files and .* files
-.idea
+# ignore hidden files and directories at any depth
+.*
+**/.*
 !.gitignore
+
+.idea
 
 #ignore files
 *.iml
