@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  serviceregistry:
+    build: ./service-registry/
+    ports: 
+    - "8761:8761"
+    
+  accountservice:
+    build: ./account-service/
+    ports:
+    - "9001:9001"
+    
+  atmservice:
+    build: ./atm-service/
+    ports: 
+    - "9002:9002"
