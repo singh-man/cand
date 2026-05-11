@@ -13,6 +13,8 @@ cd <dir>
 mvn clean install
 OR
 mvn -f <module name>/pom.xml clean install
+OR
+gradle clean build
 ```
 
 For example:
