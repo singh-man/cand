@@ -33,24 +33,40 @@ while [ "$#" -gt 0 ]; do
 done
 
 status=0
-pids=""
+failed_modules=()
+pids=()
+pid_modules=()
 
 for dir in */; do
     if [ -f "${dir}pom.xml" ]; then
-        echo "🚀 Building ${dir}..."
+        module="${dir%/}"
+        echo "🚀 Building ${module}..."
         if [ "$parallel" = true ]; then
             mvn -f "${dir}pom.xml" clean install &
-            pids="$pids $!"
+            pids+=("$!")
+            pid_modules+=("$module")
         else
-            mvn -f "${dir}pom.xml" clean install || status=1
+            if ! mvn -f "${dir}pom.xml" clean install; then
+                status=1
+                failed_modules+=("$module")
+            fi
         fi
     fi
 done
 
 if [ "$parallel" = true ]; then
-    for pid in $pids; do
-        wait "$pid" || status=1
+    for i in "${!pids[@]}"; do
+        if ! wait "${pids[$i]}"; then
+            status=1
+            failed_modules+=("${pid_modules[$i]}")
+        fi
     done
+fi
+
+if [ "${#failed_modules[@]}" -gt 0 ]; then
+    echo
+    echo "Failed modules:"
+    printf ' - %s\n' "${failed_modules[@]}"
 fi
 
 exit "$status"
